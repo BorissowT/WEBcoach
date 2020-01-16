@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block container %}
+
+
+    <h2 class="h1 text-center w-50 mx-auto mt-4 py-5"><strong>Найдите идеального репетитора английского, занимайтесь онлайн</strong></h2>
+
+    <div class="text-center mb-5">
+        <div class="btn-group mx-auto mb-0" role="group" aria-label="Basic example">
+         <a href="/goals/travel"> <button type="button" class="btn btn-outline-secondary">⛱Для путешествий</button></a>
+         <a href="/goals/study">  <button type="button" class="btn btn-outline-secondary">🏫 Для школы</button></a>
+          <a href="/goals/work"> <button type="button" class="btn btn-outline-secondary">🏢 Для работы</button></a>
+          <a href="/goals/relocate"> <button type="button" class="btn btn-outline-secondary">🚜 Для переезда</button></a>
+        </div>
+    </div>
+
+    <h5 class="text-center mb-5">Свободны прямо сейчас</h5>
+
+    <div class="w-75 m-auto">
+
+{% for i in randomlist %}
+        
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3"><a href="/profiles/{{i}}"><img src={{teachers[i|string]["picture"]}} class="img-fluid"></a></div>
+                    <div class="col-9">
+                        <p class="float-right">Рейтинг: {{teachers[i|string]["rating"]}} Ставка: {{teachers[i|string]["price"]}} / час</p>
+                        <a href="/profiles/{{i}}"><h5>{{teachers[i|string]["name"]}}</h5></a>
+                        <p>{% filter truncate(143) %}{{teachers[i|string]["about"]}}{%endfilter%}</p>
+                        <a href="/profiles/{{i}}" class="btn btn-primary btn-sm mr-3">Записаться на пробный урок</a>
+                        <a href="" class="btn btn-outline-primary btn-sm">Отправить сообщение</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block container %}
+
+
+     <div class="row mt-5">
+        <div class="col-6 offset-3">
+            <form action="/reqdone" class="card mb-3" >
+
+
+                  <div class="card-body text-center pt-5">
+                    <h3 class="card-title mt-4 mb-2">Подбор преподавателя</h3>
+                    <p class="px-5">Напишите, чего вам нужно  и мы подберем отличных ребят</p>
+                  </div>
+
+                   <hr/>
+
+                   <div class="card-body mx-3">
+
+                       <div class="row">
+                           <div class="col">
+
+                               <p>Какая цель занятий?</p>
+
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input" name="goal" value="travel"> Для путешествий
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input" name="goal" value="learn"> Для школы
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input" name="goal" value="work"> Для работы
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input"name="goal" value="move"> Для переезда
+                               </div>
+
+                           </div>
+
+                           <div class="col">
+
+                               <p>Сколько времени есть?</p>
+
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input" name="time" value="1-2"> 1-2 часа в неделю
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio"class="form-check-input" name="time" value="3-5"> 3-5 часов в неделю
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input"name="time" value="5-7"> 5-7 часов в неделю
+                               </div>
+                               <div class="form-check ">
+                                <input type="radio" class="form-check-input"name="time" value="7-10"> 7-10 часов в неделю
+                               </div>
+
+
+                           </div>
+                       </div>
+                  </div>
+
+                   <hr>
+
+                   <div class="card-body mx-3">
+
+                       <p class="mb-1 mt-2">Вас зовут</p>
+                       <input class="form-control" name="name" type="text" placeholder="">
+
+                       <p class="mb-1 mt-2">Ваш телефон</p>
+                       <input class="form-control" name="number" type="text" placeholder="">
+
+                       <input type="submit" class="btn btn-primary mt-4" value="Найдите мне преподавателя">
+
+                   </div>
+
+                </form>
+
+        </div>
+     </div>
+
+{% endblock %}

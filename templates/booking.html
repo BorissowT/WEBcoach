@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block container %}
+
+
+     <div class="row mt-5">
+        <div class="col-6 offset-3">
+            
+            
+            <form action="/done/{{id}}/{{daykey}}/{{time}}" class="card mb-3" method="GET">
+
+
+                  <div class="card-body text-center pt-5">
+                    <img src={{picture}} class="mb-3" width="95" alt="">
+                    <h5 class="card-title mt-2 mb-2">{{name}}</h5>
+                    <p class="my-1">Запись на пробный урок</p>
+                    <p class="my-1">{{day}}, {{time}}:00</p>
+                  </div>
+
+
+                   <hr/>
+
+                   <div class="card-body mx-3">
+
+                       <p class="mb-1 mt-2">Вас зовут</p>
+                       <input class="form-control" name="name"  type="text" placeholder="">
+
+                       <p class="mb-1 mt-2">Ваш телефон</p>
+                       <input class="form-control" name="number" type="text" placeholder="">
+
+                       <input type="submit" class="btn btn-primary btn-block mt-4" href="/" value="Записаться на пробный урок">
+
+                   </div>
+
+                </form>
+
+        </div>
+     </div>
+
+
+ {% endblock %}

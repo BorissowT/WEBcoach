@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block container %}
+
+
+        <div class="card my-5  mx-auto ">
+
+            <div class="card-body m-4">
+                <div class="row">
+                    <div class="col-5"><img src={{picture}} class="img-fluid"></div>
+                    <div class="col-7">
+                        <h2>{{name}}</h2>
+                        <p>
+                             {% for go in goal %}
+                            <span class="badge badge-secondary mr-2">{{goals[go]}}</span>
+                            {% endfor %}
+                            
+                            Рейтинг: {{rating}} Ставка: {{price}} / час</p>
+                        <p >{{about}}
+                            <br> <br>
+                        <a href="" class="btn btn-outline-secondary btn-sm ">Отправить сообщение</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body  m-4">
+                <h5 class="mb-4">Записаться на пробный урок</h5>
+                <table class="table">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Пн</th>
+                        <th>Вт</th>
+                        <th>Ср</th>
+                        <th>Чт</th>
+                        <th>Пт</th>
+                        <th>Сб</th>
+                        <th>Вс</th>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td><span class="btn">8:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["8:00"] %}
+                                <td><a href="/booking/{{id}}/{{day}}/8" class="btn btn-sm btn-success">8:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">8:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">10:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["10:00"] %}
+                                <td><a href="/booking/{{id}}/10" class="btn btn-sm btn-success">10:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">10:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">12:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["12:00"] %}
+                                <td><a href="/booking/{{id}}/12" class="btn btn-sm btn-success">12:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">12:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+
+                    </tr>
+ 
+                    <tr>
+                        <td><span class="btn">14:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["14:00"] %}
+                                <td><a href="/booking/{{id}}/14" class="btn btn-sm btn-success">14:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">14:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">16:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["16:00"] %}
+                                <td><a href="/booking/{{id}}/16" class="btn btn-sm btn-success">16:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">16:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">18:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["18:00"] %}
+                                <td><a href="/booking/{{id}}/18" class="btn btn-sm btn-success">18:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">18:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">20:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["20:00"] %}
+                                <td><a href="/booking/{{id}}/20" class="btn btn-sm btn-success">20:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">20:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr>
+                        <td><span class="btn">22:00</span></td>
+                        {% for day in days%}
+                            {% if days[day]["22:00"] %}
+                                <td><a href="/booking/{{id}}/22" class="btn btn-sm btn-success">22:00</a></td>
+                            {% else %}                     
+                                <td><a href="" class="btn btn-sm btn-secondary">22:00</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    
+                    
+                </table>
+            </div>
+
+
+
+        </div>
+
+    {% endblock %}
