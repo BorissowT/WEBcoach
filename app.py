@@ -51,42 +51,68 @@ class Request(db.Model):
     name = db.Column(db.String(50), nullable=False)
     number = db.Column(db.String(50), nullable=False)
 
-
-with open("teachers.json", "r", encoding='utf8') as f:
-    contents = f.read()
-teachers = json.loads(contents)
-
-with open("goals.json", "r", encoding='utf8') as f:
-    contents = f.read()
-goals = json.loads(contents)
-
-
 @app.route("/")
 def main():
     randomlist = []
     counter = 0
     while counter < 6:
-        rand = random.randrange(1, len(teachers))
+        rand = random.randrange(1, len(db.session.query(Teacher).all()))
         if rand not in randomlist:
             randomlist.append(rand)
             counter += 1
-    output = render_template("index.html", teachers=teachers, randomlist=randomlist)
+    names = []
+    abouts = []
+    ratings = []
+    prices = []
+    pictures = []
+    for id in randomlist:
+        teacher = db.session.query(Teacher).get(id)
+        names.append(teacher.name)
+        abouts.append(teacher.about)
+        ratings.append(teacher.rating)
+        prices.append(teacher.price)
+        pictures.append(teacher.picture)
+
+    output = render_template("index.html", randomlist=randomlist, size=len(randomlist),
+                             ratings=ratings, prices=prices, abouts=abouts, names=names, pictures=pictures)
     return output
 
 
 @app.route("/goals/<goal>")
 def goal(goal):
-    # sorted_teachers=sorted(teachers.values(), key="rating")
-    # print(sorted_teachers)
+    if goal == "travel":
+        goal_query = db.session.query(Goals).filter(Goals.travel)
+    if goal == "work":
+        goal_query = db.session.query(Goals).filter(Goals.work)
+    if goal == "study":
+        goal_query = db.session.query(Goals).filter(Goals.study)
+    if goal == "relocate":
+        goal_query = db.session.query(Goals).filter(Goals.relocate)
+    rating_query = db.session.query(Teacher).order_by(Teacher.rating.desc())
+    sortedteacheridlist = []
+    sortedgoallist = []
 
-    goallist = {}
-    sortedgoallst = []
-    for teacher in teachers:
-        if goal in teachers[str(teacher)]["goals"]:
-            goallist[teacher] = teachers[str(teacher)]["rating"]
-    for i in sorted(goallist.items(), key=lambda para: (para[1], para[0]), reverse=True):
-        sortedgoallst.append(i[0])
-    output = render_template("goal.html", teachers=teachers, goal=goal, name=goals[goal], sortedgoallst=sortedgoallst)
+    for go in goal_query.all():
+        sortedgoallist.append(go.teacher.id)
+    for teacher in rating_query.all():
+        if teacher.id in sortedgoallist:
+            sortedteacheridlist.append(teacher.id)
+
+    names = []
+    abouts = []
+    ratings = []
+    prices = []
+    pictures = []
+    for id in sortedteacheridlist:
+        teacher = db.session.query(Teacher).get(id)
+        names.append(teacher.name)
+        abouts.append(teacher.about)
+        ratings.append(teacher.rating)
+        prices.append(teacher.price)
+        pictures.append(teacher.picture)
+
+    output = render_template("goal.html", sortedgoallst=sortedteacheridlist, goal=data.goals[goal], ratings=ratings,
+                             prices=prices, abouts=abouts, size=len(sortedteacheridlist), names=names, pictures=pictures)
     return output
 
 

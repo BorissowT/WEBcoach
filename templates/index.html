@@ -17,18 +17,18 @@
 
     <div class="w-75 m-auto">
 
-{% for i in randomlist %}
+{% for i in range(size) %}
         
         
         <div class="card mb-4">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-3"><a href="/profiles/{{i}}"><img src={{teachers[i|string]["picture"]}} class="img-fluid"></a></div>
+                    <div class="col-3"><a href="/profiles/{{randomlist[i]}}"><img src={{pictures[i]}} class="img-fluid"></a></div>
                     <div class="col-9">
-                        <p class="float-right">Рейтинг: {{teachers[i|string]["rating"]}} Ставка: {{teachers[i|string]["price"]}} / час</p>
-                        <a href="/profiles/{{i}}"><h5>{{teachers[i|string]["name"]}}</h5></a>
-                        <p>{% filter truncate(143) %}{{teachers[i|string]["about"]}}{%endfilter%}</p>
-                        <a href="/profiles/{{i}}" class="btn btn-primary btn-sm mr-3">Записаться на пробный урок</a>
+                        <p class="float-right"><span  class=" badge badge-warning">Рейтинг: {{ratings[i]}} </span>   <span class="ml-1 badge badge-success">Ставка: {{prices[i]}} / час</span> </p>
+                        <a href="/profiles/{{randomlist[i]}}"><h5>{{names[i]}}</h5></a>
+                        <p>{% filter truncate(143) %}{{abouts[i]}}{%endfilter%}</p>
+                        <a href="/profiles/{{randomlist[i]}}" class="btn btn-primary btn-sm mr-3">Записаться на пробный урок</a>
                         <a href="" class="btn btn-outline-primary btn-sm">Отправить сообщение</a>
                     </div>
                 </div>

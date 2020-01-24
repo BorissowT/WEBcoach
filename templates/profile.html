@@ -9,12 +9,17 @@
                     <div class="col-5"><img src={{picture}} class="img-fluid"></div>
                     <div class="col-7">
                         <h2>{{name}}</h2>
-                        <p>
+                        
+                            <ul class="pagination justify-content-end">
+                            <span  class=" badge badge-warning"> Рейтинг: {{rating}} </span>
+                            <span class="ml-1 badge badge-success"> Ставка: {{price}} / час </span>
+                            </ul>
+                        <p># 
                              {% for go in goalslist %}
-                            <span class="badge badge-secondary mr-2">{{goals[go]}}</span>
+                            <span class="badge badge-secondary mr-1">{{goals[go]}}</span>
                             {% endfor %}
-                            
-                            Рейтинг: {{rating}} Ставка: {{price}} / час</p>
+    
+                        </p>
                         <p >{{about}}
                             <br> <br>
                         <a href="" class="btn btn-outline-secondary btn-sm ">Отправить сообщение</a>
