@@ -3,10 +3,15 @@ import json
 import data
 import random
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, BooleanField, PasswordField, RadioField
+from wtforms.validators import NumberRange, DataRequired, Email, NumberRange
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///teachers.db"
 db = SQLAlchemy(app)
+app.secret_key = 'my-super-secret-phrase-I-do-not-tell-this-to-nobody'
+
 
 class Teacher(db.Model):
     __tablename__ = "teacher"
@@ -21,6 +26,7 @@ class Teacher(db.Model):
     free = db.Column(db.JSON, nullable=False)
     booking = db.relationship("Booking", back_populates="teacher")
 
+
 class Goals(db.Model):
     __tablename__ = 'goals'
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +37,7 @@ class Goals(db.Model):
 
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'))
     teacher = db.relationship("Teacher", back_populates="goals")
+
 
 class Booking(db.Model):
     __tablename__ = 'booking'
@@ -43,6 +50,7 @@ class Booking(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'))
     teacher = db.relationship("Teacher", back_populates="booking")
 
+
 class Request(db.Model):
     __tablename__ = 'request'
     id = db.Column(db.Integer, primary_key=True)
@@ -51,6 +59,24 @@ class Request(db.Model):
     name = db.Column(db.String(50), nullable=False)
     number = db.Column(db.String(50), nullable=False)
 
+
+############
+class USER(FlaskForm):
+    name = StringField('Name', description='Введите ваше имя', validators=[DataRequired()])
+    number = StringField('Number', description='Введите ваш номер телефона', validators=[DataRequired()])
+
+
+class REQUEST(FlaskForm):
+    name = StringField('Name', description='Введите ваше имя', validators=[DataRequired()])
+    number = StringField('Number', description='Введите ваш номер телефона', validators=[DataRequired()])
+    goal = RadioField("goal", choices=[("travel", "Для путешествий"), ("study", "Для учебы"), ("work", "Для работы"),
+                                       ("relocate", "Для переезда")], validators=[DataRequired()])
+    free_time = RadioField("free_time", choices=[("1-2", "1-2 часа в неделю"), ("3-5", "3-5 часа в неделю"),
+                          ("5-7", "5-7 часов в неделю"), ("7-10", "7-10 часов в неделю")],
+                           validators=[DataRequired()])
+
+
+#############
 @app.route("/")
 def main():
     randomlist = []
@@ -112,7 +138,8 @@ def goal(goal):
         pictures.append(teacher.picture)
 
     output = render_template("goal.html", sortedgoallst=sortedteacheridlist, goal=data.goals[goal], ratings=ratings,
-                             prices=prices, abouts=abouts, size=len(sortedteacheridlist), names=names, pictures=pictures)
+                             prices=prices, abouts=abouts, size=len(sortedteacheridlist), names=names,
+                             pictures=pictures)
     return output
 
 
@@ -137,43 +164,28 @@ def teacher(id):
     return output
 
 
-@app.route("/request")
+@app.route("/request", methods=['GET', 'POST'])
 def req():
-    output = render_template("request.html")
-    return output
+    form = REQUEST()
+    if form.validate_on_submit():
+        neudb = Request(name=form.name.data, number=form.number.data, goal=form.goal.data, time=form.free_time.data)
+        db.session.add(neudb)
+        db.session.commit()
+        return render_template('done.html')
+    return render_template("request.html", form=form)
 
 
-@app.route("/reqdone")
-def reqdone():
-    goal = request.args.get('goal')
-    time = request.args.get('time')
-    name = request.args.get('name')
-    number = request.args.get('number')
-    neudb = Request(name=name, number=number, goal=goal, time=time)
-    db.session.add(neudb)
-    db.session.commit()
-    output = render_template("done.html")
-    return output
-
-
-@app.route("/booking/<id>/<day>/<time>")
+@app.route("/booking/<id>/<day>/<time>", methods=['GET', 'POST'])
 def bking(id, day, time):
+    form = USER()
     teacher = db.session.query(Teacher).get(id)
-    output = render_template("booking.html", id=id, time=time, name=teacher.name,
-                             picture=teacher.picture, day=data.days[day], daykey=day)
-    return output
-
-
-@app.route("/done/<id>/<day>/<time>")
-def bkngdone(id, day, time):
-    name = request.args.get('name')
-    number = request.args.get('number')
-    teacher = Teacher.query.filter_by(id=id).scalar()
-    booking = Booking(name=name, number=number, day=day, time=time, teacher=teacher)
-    db.session.add(booking)
-    db.session.commit()
-    output = render_template("done.html")
-    return output
+    if form.validate_on_submit():
+        booking = Booking(name=form.name.data, number=form.number.data, day=day, time=time, teacher=teacher)
+        db.session.add(booking)
+        db.session.commit()
+        return render_template('done.html')
+    return render_template("booking.html", id=id, time=time, name=teacher.name,
+                           picture=teacher.picture, day=data.days[day], daykey=day, form=form)
 
 
 @app.errorhandler(500)
