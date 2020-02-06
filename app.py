@@ -1,15 +1,15 @@
-from flask import Flask, render_template, request
-import json
+from flask import Flask, render_template
 import data
+from data import USER
+from data import REQUEST
 import random
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, PasswordField, RadioField
-from wtforms.validators import NumberRange, DataRequired, Email, NumberRange
-
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-
+from database import Teacher
+from database import Request
+from database import Booking
+from database import Goals
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///teachers.db"
@@ -17,70 +17,6 @@ db = SQLAlchemy(app)
 app.secret_key = 'my-super-secret-phrase-I-do-not-tell-this-to-nobody'
 
 
-class Teacher(db.Model):
-    __tablename__ = "teacher"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    about = db.Column(db.String(500), nullable=False)
-    rating = db.Column(db.Float, nullable=False)
-    picture = db.Column(db.String(200), unique=True, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    goals = db.relationship("Goals", uselist=False, back_populates="teacher")
-    free = db.Column(db.JSON, nullable=False)
-    booking = db.relationship("Booking", back_populates="teacher")
-
-
-class Goals(db.Model):
-    __tablename__ = 'goals'
-    id = db.Column(db.Integer, primary_key=True)
-    travel = db.Column(db.Boolean, nullable=False)
-    study = db.Column(db.Boolean, nullable=False)
-    work = db.Column(db.Boolean, nullable=False)
-    relocate = db.Column(db.Boolean, nullable=False)
-
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'))
-    teacher = db.relationship("Teacher", back_populates="goals")
-
-
-class Booking(db.Model):
-    __tablename__ = 'booking'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    number = db.Column(db.String(50), nullable=False)
-    day = db.Column(db.String(51), nullable=False)
-    time = db.Column(db.Integer, nullable=False)
-
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'))
-    teacher = db.relationship("Teacher", back_populates="booking")
-
-
-class Request(db.Model):
-    __tablename__ = 'request'
-    id = db.Column(db.Integer, primary_key=True)
-    goal = db.Column(db.String(10), nullable=False)
-    time = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    number = db.Column(db.String(50), nullable=False)
-
-
-############
-class USER(FlaskForm):
-    name = StringField('Name', description='Введите ваше имя', validators=[DataRequired()])
-    number = StringField('Number', description='Введите ваш номер телефона', validators=[DataRequired()])
-
-
-class REQUEST(FlaskForm):
-    name = StringField('Name', description='Введите ваше имя', validators=[DataRequired()])
-    number = StringField('Number', description='Введите ваш номер телефона', validators=[DataRequired()])
-    goal = RadioField("goal", choices=[("travel", "Для путешествий"), ("study", "Для учебы"), ("work", "Для работы"),
-                                       ("relocate", "Для переезда")], validators=[DataRequired()])
-    free_time = RadioField("free_time", choices=[("1-2", "1-2 часа в неделю"), ("3-5", "3-5 часа в неделю"),
-                          ("5-7", "5-7 часов в неделю"), ("7-10", "7-10 часов в неделю")],
-                           validators=[DataRequired()])
-
-
-#############
 @app.route("/")
 def main():
     randomlist = []
